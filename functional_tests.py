@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 
@@ -15,13 +17,24 @@ class NewVisitorTest(unittest.TestCase):
 
         # To-do in the header of the web page
         self.assertIn('To-Do', self.browser.title)
-        self.fail('Finish the test!')
+        header_text = self.browser.find_element('tag name', 'h1').text
+        self.assertIn('To-Do', header_text)
 
         # Entering a to-do item
+        input_box = self.browser.find_element("id", 'id_new_item')
+        self.assertEqual(input_box.get_attribute('placeholder'), 'Enter a to-do item')
 
         # Enter "buy-peacock-feathers" in text box
+        input_box.send_keys('Buy peacock feathers')
 
         # On hitting enter, the page updates, and the page lists "1: Buy peacock feathers" as an item in a to-do list
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element('id', 'id_list_table')
+        rows = table.find_elements('tag name', 'tr')
+        self.assertTrue(any(row.text == '1: Buy peacock feathers' for row in rows),
+                        'New to do item not appearing in table')
 
         # Use textbox to add another to-do "Use peacock feathers to make a fly"
 
@@ -32,6 +45,8 @@ class NewVisitorTest(unittest.TestCase):
         # Visiting the unique url just to see if its still there
 
         # Goes back to sleep
+
+        self.fail('Finish the test!')
 
 
 if __name__ == '__main__':
