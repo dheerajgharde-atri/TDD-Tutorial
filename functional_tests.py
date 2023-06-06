@@ -33,10 +33,10 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element('id', 'id_list_table')
         rows = table.find_elements('tag name', 'tr')
-        self.assertTrue(any(row.text == '1: Buy peacock feathers' for row in rows),
-                        'New to do item not appearing in table')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         # Use textbox to add another to-do "Use peacock feathers to make a fly"
+        self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
 
         # Page updates and shows both the items on the list
 
