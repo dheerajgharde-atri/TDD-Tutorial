@@ -11,6 +11,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_row_in_table(self, row_text):
+        table = self.browser.find_element("id", "id_list_table")
+        rows = table.find_elements("tag name", "tr")
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_start_list_and_retreive_later(self):
         # To checkout homepage
         self.browser.get('http://localhost:8000')
@@ -31,12 +36,10 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element('id', 'id_list_table')
-        rows = table.find_elements('tag name', 'tr')
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.check_row_in_table('1: Buy peacock feathers')
 
         # Use textbox to add another to-do "Use peacock feathers to make a fly"
-        self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
+        self.check_row_in_table('2: Use peacock feathers to make a fly')
 
         # Page updates and shows both the items on the list
 
