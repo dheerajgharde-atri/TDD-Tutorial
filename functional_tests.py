@@ -39,6 +39,11 @@ class NewVisitorTest(unittest.TestCase):
         self.check_row_in_table('1: Buy peacock feathers')
 
         # Use textbox to add another to-do "Use peacock feathers to make a fly"
+        input_box = self.browser.find_element("id", 'id_new_item')
+        input_box.send_keys('Use peacock feathers to make a fly')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(2)
+
         self.check_row_in_table('2: Use peacock feathers to make a fly')
 
         # Page updates and shows both the items on the list
